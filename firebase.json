@@ -1,1 +1,14 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"taina-695c7","configurations":{"web":"1:74973355353:web:1d3b256f59536a144b0048"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "taina-695c7",
+          "configurations": {
+            "web": "1:74973355353:web:1d3b256f59536a144b0048"
+          }
+        }
+      }
+    }
+  }
+}
