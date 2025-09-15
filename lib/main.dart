@@ -116,13 +116,13 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  'Welcome to Asap Work',
+                  'Test Case - Asap Work ',
                   style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Streamline your business operations with our comprehensive management platform',
+                  'Made by Alexandre Cavalcante - Position: Growth Engineer',
                   style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8), height: 1.5),
                   textAlign: TextAlign.center,
                 ),
@@ -131,7 +131,7 @@ class HomePage extends StatelessWidget {
                   context,
                   icon: Icons.people_rounded,
                   title: 'Contacts',
-                  subtitle: 'Manage your professional network',
+                  subtitle: 'List of all your contacts',
                   gradient: LinearGradient(colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)]),
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ContactsScreen())),
                 ),
@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                   context,
                   icon: Icons.business_rounded,
                   title: 'Companies',
-                  subtitle: 'Track your business relationships',
+                  subtitle: 'List of all your companies',
                   gradient: LinearGradient(colors: [const Color(0xFF10B981), const Color(0xFF059669)]),
                   onTap:
                       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompaniesScreen())),
@@ -150,7 +150,7 @@ class HomePage extends StatelessWidget {
                   context,
                   icon: Icons.work_rounded,
                   title: 'Mission Orders',
-                  subtitle: 'Organize and monitor your projects',
+                  subtitle: 'Create and manage your mission orders',
                   gradient: LinearGradient(colors: [const Color(0xFFF59E0B), const Color(0xFFD97706)]),
                   onTap:
                       () =>

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/company.dart';
 import '../models/contact.dart';
 import '../models/mission_order.dart';
@@ -98,7 +99,6 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to delete mission order: $e')));
         }
-
       }
 
       setState(() {
@@ -110,18 +110,13 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mission Orders'),
-      ),
+      appBar: AppBar(title: const Text('Mission Orders')),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFF0F0F23),
-              const Color(0xFF1A1B36).withOpacity(0.8),
-            ],
+            colors: [const Color(0xFF0F0F23), const Color(0xFF1A1B36).withOpacity(0.8)],
           ),
         ),
         child: _buildBody(),
@@ -167,7 +162,7 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
     }
 
     return Padding(
-      padding: const EdgeInsets.only( left: 80.0, right: 80.0, top: 20.0, bottom: 30.0),
+      padding: const EdgeInsets.only(left: 80.0, right: 80.0, top: 20.0, bottom: 30.0),
       child: RefreshIndicator(
         onRefresh: _loadMissionOrders,
         child: ListView.builder(
@@ -180,11 +175,7 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
+                  BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4)),
                 ],
               ),
               child: Card(
@@ -199,41 +190,24 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                       color: _getStatusColor(order.status),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
-                      Icons.work_rounded,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+                    child: const Icon(Icons.work_rounded, color: Colors.white, size: 24),
                   ),
                   title: Text(
                     order.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 4),
-                      Text(
-                        order.jobTitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.7),
-                        ),
-                      ),
+                      Text(order.jobTitle, style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7))),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: _getStatusColor(order.status).withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _getStatusColor(order.status),
-                            width: 1,
-                          ),
+                          border: Border.all(color: _getStatusColor(order.status), width: 1),
                         ),
                         child: Text(
                           order.status.toString().split('.').last.toUpperCase(),
@@ -269,10 +243,7 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
+                        decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(8)),
                         child: IconButton(
                           icon: const Icon(Icons.delete_rounded, color: Colors.white, size: 20),
                           onPressed: () => _deleteMissionOrder(order),
@@ -300,11 +271,22 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                           _buildDetailRow('Location', order.location, Icons.location_on_rounded),
                           _buildDetailRow('Amount', order.amount, Icons.attach_money_rounded),
                           _buildDetailRow('Deal Stage', order.stage.id, Icons.timeline_rounded),
-                          _buildDetailRow('Start Date', order.startDate.toLocal().toString().split(' ')[0], Icons.calendar_today_rounded),
-                          _buildDetailRow('End Date', order.endDate.toLocal().toString().split(' ')[0], Icons.event_rounded),
+                          _buildDetailRow(
+                            'Start Date',
+                            order.startDate.toLocal().toString().split(' ')[0],
+                            Icons.calendar_today_rounded,
+                          ),
+                          _buildDetailRow(
+                            'End Date',
+                            order.endDate.toLocal().toString().split(' ')[0],
+                            Icons.event_rounded,
+                          ),
                           const SizedBox(height: 16),
 
-                          const Text('Contacts', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                          const Text(
+                            'Contacts',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
                           const SizedBox(height: 8),
                           if (order.contacts.isNotEmpty)
                             ...order.contacts.map(
@@ -323,13 +305,14 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                                       contact.fullName,
                                       style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
                                     ),
-                                    Text(
-                                      contact.email,
-                                      style: TextStyle(color: Colors.white.withOpacity(0.8)),
-                                    ),
+                                    Text(contact.email, style: TextStyle(color: Colors.white.withOpacity(0.8))),
                                     Text(
                                       contact.type.toString().split('.').last.toUpperCase(),
-                                      style: const TextStyle(color: Color(0xFF3B82F6), fontSize: 12, fontWeight: FontWeight.w600),
+                                      style: const TextStyle(
+                                        color: Color(0xFF3B82F6),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -337,7 +320,10 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                             ),
                           const SizedBox(height: 16),
 
-                          const Text('Companies', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                          const Text(
+                            'Companies',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
                           const SizedBox(height: 8),
                           if (order.companies.isNotEmpty)
                             ...order.companies.map(
@@ -373,7 +359,10 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                           const SizedBox(height: 16),
 
                           if (order.notes.isNotEmpty) ...[
-                            const Text('Notes', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                            const Text(
+                              'Notes',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            ),
                             const SizedBox(height: 8),
                             Container(
                               width: double.infinity,
@@ -383,10 +372,7 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: const Color(0xFF6366F1), width: 1),
                               ),
-                              child: Text(
-                                order.notes,
-                                style: TextStyle(color: Colors.white.withOpacity(0.9)),
-                              ),
+                              child: Text(order.notes, style: TextStyle(color: Colors.white.withOpacity(0.9))),
                             ),
                           ],
                         ],
@@ -409,19 +395,8 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
         children: [
           Icon(icon, size: 20, color: const Color(0xFF6366F1)),
           const SizedBox(width: 12),
-          Text(
-            '$label: ',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withOpacity(0.8),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
+          Text('$label: ', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white.withOpacity(0.8))),
+          Expanded(child: Text(value, style: const TextStyle(color: Colors.white))),
         ],
       ),
     );
@@ -670,12 +645,21 @@ class _CreateMissionScreenState extends State<CreateMissionScreen> {
                           decoration: const InputDecoration(
                             labelText: 'Amount *',
                             border: OutlineInputBorder(),
-                            hintText: 'e.g., 65k€/year',
+                            hintText: 'Enter amount in numbers only (e.g., 5000)',
                           ),
+                          inputFormatters: [
+                            // number only
+                            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                          ],
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Please enter an amount';
                             }
+                            // validate amount has number only
+                            if (RegExp(r'^[0-9]*$').hasMatch(value) == false) {
+                              return 'HubSpot only accepts numbers for amount';
+                            }
+
                             return null;
                           },
                         ),
@@ -1248,326 +1232,332 @@ class _EditMissionOrderScreenState extends State<EditMissionOrderScreen> {
         title: const Text('Edit Mission Order'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Mission Order Name *', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a mission order name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              DropdownButtonFormField<MissionOrderType>(
-                value: _selectedType,
-                decoration: const InputDecoration(labelText: 'Type *', border: OutlineInputBorder()),
-                items:
-                    MissionOrderType.values.map((type) {
-                      return DropdownMenuItem(value: type, child: Text(type.toString().split('.').last));
-                    }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedType = value;
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _jobTitleController,
-                decoration: const InputDecoration(labelText: 'Job Title *', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a job title';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _locationController,
-                decoration: const InputDecoration(labelText: 'Location *', border: OutlineInputBorder()),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Please enter a location';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: _startDate,
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                        );
-                        if (date != null) {
-                          setState(() {
-                            _startDate = date;
-                          });
-                        }
-                      },
-                      child: InputDecorator(
-                        decoration: const InputDecoration(labelText: 'Start Date *', border: OutlineInputBorder()),
-                        child: Text(_startDate.toLocal().toString().split(' ')[0]),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        final date = await showDatePicker(
-                          context: context,
-                          initialDate: _endDate,
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                        );
-                        if (date != null) {
-                          setState(() {
-                            _endDate = date;
-                          });
-                        }
-                      },
-                      child: InputDecorator(
-                        decoration: const InputDecoration(labelText: 'End Date *', border: OutlineInputBorder()),
-                        child: Text(_endDate.toLocal().toString().split(' ')[0]),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              DropdownButtonFormField<MissionOrderStatus>(
-                value: _selectedStatus,
-                decoration: const InputDecoration(labelText: 'Status *', border: OutlineInputBorder()),
-                items:
-                    MissionOrderStatus.values.map((status) {
-                      return DropdownMenuItem(value: status, child: Text(status.toString().split('.').last));
-                    }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedStatus = value;
-                    });
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // DropdownButtonFormField<SalesPipelineStage>(
-              //   value: _selectedStage,
-              //   decoration: const InputDecoration(labelText: 'Pipeline Stage *', border: OutlineInputBorder()),
-              //   items:
-              //       SalesPipelineStage.values.map((stage) {
-              //         return DropdownMenuItem(value: stage, child: Text(stage.id));
-              //       }).toList(),
-              //   onChanged: (value) {
-              //     if (value != null) {
-              //       setState(() {
-              //         _selectedStage = value;
-              //       });
-              //     }
-              //   },
-              // ),
-              dropAndDownDealStage,
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(labelText: 'Amount', border: OutlineInputBorder()),
-              ),
-              const SizedBox(height: 16),
-
-              // Contacts selection
-              const Text('Contacts *', style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(4),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 80.0, right: 80.0, top: 20.0, bottom: 30.0),
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Mission Order Name *', border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a mission order name';
+                    }
+                    return null;
+                  },
                 ),
-                child: Column(
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<MissionOrderType>(
+                  value: _selectedType,
+                  decoration: const InputDecoration(labelText: 'Type *', border: OutlineInputBorder()),
+                  items:
+                      MissionOrderType.values.map((type) {
+                        return DropdownMenuItem(value: type, child: Text(type.toString().split('.').last));
+                      }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedType = value;
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _jobTitleController,
+                  decoration: const InputDecoration(labelText: 'Job Title *', border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a job title';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _locationController,
+                  decoration: const InputDecoration(labelText: 'Location *', border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a location';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                Row(
                   children: [
-                    if (_selectedContacts.isNotEmpty)
-                      ..._selectedContacts
-                          .map(
-                            (contact) => ListTile(
-                              title: Text(contact.fullName),
-                              subtitle: Text(contact.email),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.remove_circle),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedContacts.remove(contact);
-                                  });
-                                },
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ListTile(
-                      leading: const Icon(Icons.add),
-                      title: const Text('Add Contact'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                title: const Text('Select Contact'),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: _contacts.length,
-                                    itemBuilder: (context, index) {
-                                      final contact = _contacts[index];
-                                      final isSelected = _selectedContacts.contains(contact);
-                                      return ListTile(
-                                        title: Text(contact.fullName),
-                                        subtitle: Text(contact.email),
-                                        trailing: isSelected ? const Icon(Icons.check) : null,
-                                        onTap: () {
-                                          if (!isSelected) {
-                                            setState(() {
-                                              _selectedContacts.add(contact);
-                                            });
-                                          }
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-                                ],
-                              ),
-                        );
-                      },
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: _startDate,
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2030),
+                          );
+                          if (date != null) {
+                            setState(() {
+                              _startDate = date;
+                            });
+                          }
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(labelText: 'Start Date *', border: OutlineInputBorder()),
+                          child: Text(_startDate.toLocal().toString().split(' ')[0]),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          final date = await showDatePicker(
+                            context: context,
+                            initialDate: _endDate,
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2030),
+                          );
+                          if (date != null) {
+                            setState(() {
+                              _endDate = date;
+                            });
+                          }
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(labelText: 'End Date *', border: OutlineInputBorder()),
+                          child: Text(_endDate.toLocal().toString().split(' ')[0]),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Companies selection
-              const Text('Companies *', style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(4),
+                DropdownButtonFormField<MissionOrderStatus>(
+                  value: _selectedStatus,
+                  decoration: const InputDecoration(labelText: 'Status *', border: OutlineInputBorder()),
+                  items:
+                      MissionOrderStatus.values.map((status) {
+                        return DropdownMenuItem(value: status, child: Text(status.toString().split('.').last));
+                      }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        _selectedStatus = value;
+                      });
+                    }
+                  },
                 ),
-                child: Column(
-                  children: [
-                    if (_selectedCompanies.isNotEmpty)
-                      ..._selectedCompanies
-                          .map(
-                            (company) => ListTile(
-                              title: Text(company.name),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.remove_circle),
-                                onPressed: () {
-                                  setState(() {
-                                    _selectedCompanies.remove(company);
-                                  });
-                                },
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ListTile(
-                      leading: const Icon(Icons.add),
-                      title: const Text('Add Company'),
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => AlertDialog(
-                                title: const Text('Select Company'),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: _companies.length,
-                                    itemBuilder: (context, index) {
-                                      final company = _companies[index];
-                                      final isSelected = _selectedCompanies.contains(company);
-                                      return ListTile(
-                                        title: Text(company.name),
-                                        trailing: isSelected ? const Icon(Icons.check) : null,
-                                        onTap: () {
-                                          if (!isSelected) {
-                                            setState(() {
-                                              _selectedCompanies.add(company);
-                                            });
-                                          }
-                                          Navigator.pop(context);
-                                        },
-                                      );
-                                    },
-                                  ),
+                const SizedBox(height: 16),
+
+                dropAndDownDealStage,
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _amountController,
+                  decoration: const InputDecoration(labelText: 'Amount', border: OutlineInputBorder()),
+                  inputFormatters: [
+                    // number only
+                    FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+                  ],
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter an amount';
+                    }
+                    // validate amount has number only
+                    if (RegExp(r'^[0-9]*$').hasMatch(value) == false) {
+                      return 'HubSpot only accepts numbers for amount';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Contacts selection
+                const Text('Contacts *', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    children: [
+                      if (_selectedContacts.isNotEmpty)
+                        ..._selectedContacts
+                            .map(
+                              (contact) => ListTile(
+                                title: Text(contact.fullName),
+                                subtitle: Text(contact.email),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.remove_circle),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedContacts.remove(contact);
+                                    });
+                                  },
                                 ),
-                                actions: [
-                                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-                                ],
                               ),
-                        );
-                      },
+                            )
+                            .toList(),
+                      ListTile(
+                        leading: const Icon(Icons.add),
+                        title: const Text('Add Contact'),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => AlertDialog(
+                                  title: const Text('Select Contact'),
+                                  content: SizedBox(
+                                    width: double.maxFinite,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _contacts.length,
+                                      itemBuilder: (context, index) {
+                                        final contact = _contacts[index];
+                                        final isSelected = _selectedContacts.contains(contact);
+                                        return ListTile(
+                                          title: Text(contact.fullName),
+                                          subtitle: Text(contact.email),
+                                          trailing: isSelected ? const Icon(Icons.check) : null,
+                                          onTap: () {
+                                            if (!isSelected) {
+                                              setState(() {
+                                                _selectedContacts.add(contact);
+                                              });
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                                  ],
+                                ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Companies selection
+                const Text('Companies *', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Column(
+                    children: [
+                      if (_selectedCompanies.isNotEmpty)
+                        ..._selectedCompanies
+                            .map(
+                              (company) => ListTile(
+                                title: Text(company.name),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.remove_circle),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedCompanies.remove(company);
+                                    });
+                                  },
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ListTile(
+                        leading: const Icon(Icons.add),
+                        title: const Text('Add Company'),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => AlertDialog(
+                                  title: const Text('Select Company'),
+                                  content: SizedBox(
+                                    width: double.maxFinite,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _companies.length,
+                                      itemBuilder: (context, index) {
+                                        final company = _companies[index];
+                                        final isSelected = _selectedCompanies.contains(company);
+                                        return ListTile(
+                                          title: Text(company.name),
+                                          trailing: isSelected ? const Icon(Icons.check) : null,
+                                          onTap: () {
+                                            if (!isSelected) {
+                                              setState(() {
+                                                _selectedCompanies.add(company);
+                                              });
+                                            }
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                                  ],
+                                ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _notesController,
+                  decoration: const InputDecoration(labelText: 'Notes', border: OutlineInputBorder()),
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 24),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _isLoading ? null : () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _updateMissionOrder,
+                        child:
+                            _isLoading
+                                ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                                : const Text('Save Changes'),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _notesController,
-                decoration: const InputDecoration(labelText: 'Notes', border: OutlineInputBorder()),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 24),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _isLoading ? null : () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _updateMissionOrder,
-                      child:
-                          _isLoading
-                              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                              : const Text('Save Changes'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
