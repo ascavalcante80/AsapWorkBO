@@ -9,7 +9,8 @@ from firebase_functions import https_fn, options
 from firebase_functions.options import set_global_options
 from firebase_admin import initialize_app, firestore
 
-from utils.wrappers import wrapper_sync_deal, wrapper_create_deal, wrapper_update_deal
+from utils.wrappers import wrapper_sync_deal, wrapper_create_deal_on_hs, wrapper_update_deal_on_hs, \
+    wrapper_delete_deal_on_hs
 
 set_global_options(max_instances=1)
 initialize_app()
@@ -37,7 +38,7 @@ def create_deal(req: https_fn.Request) -> https_fn.Response:
         data = json.loads(req.data.decode("utf-8"))
     else:
         data = req.data
-    return wrapper_create_deal(data, db)
+    return wrapper_create_deal_on_hs(data, db)
 
 
 @https_fn.on_request(cors=options.CorsOptions(cors_origins="*", cors_methods=["post"]))
@@ -46,4 +47,13 @@ def update_deal(req: https_fn.Request) -> https_fn.Response:
         data = json.loads(req.data.decode("utf-8"))
     else:
         data = req.data
-    return wrapper_update_deal(data, db)
+    return wrapper_update_deal_on_hs(data, db)
+
+
+@https_fn.on_request(cors=options.CorsOptions(cors_origins="*", cors_methods=["post"]))
+def delete_deal(req: https_fn.Request) -> https_fn.Response:
+    if isinstance(req.data, bytes):
+        data = json.loads(req.data.decode("utf-8"))
+    else:
+        data = req.data
+    return wrapper_delete_deal_on_hs(data, db)

@@ -34,7 +34,30 @@ mapping_properties = {
 }
 
 
-def wrapper_create_deal(data, db) -> Any:
+def wrapper_delete_deal_on_hs(data, db) -> Any:
+    logging.info('Received request to delete deal with data: %s', data)
+
+    # Replace with your actual values
+    ACCESS_TOKEN = "pat-eu1-39392c32-b4ba-4794-b17e-82770962effb"
+
+    deal_id = data['data']['hubspot_deal_id']
+    url = f"https://api.hubapi.com/crm/v3/objects/deals/{deal_id}"
+
+    headers = {
+        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.delete(url, headers=headers)
+
+    if response.status_code == 204:
+        logging.info('Deal deleted successfully in HubSpot: %s', deal_id)
+        return {'status': 204, 'message': f'Deal {deal_id} deleted successfully in HubSpot', 'data': response.json()}
+    else:
+        return {'status': response.status_code, 'message': f'Error deleting {deal_id} on HubSpot', 'data': None}
+
+
+def wrapper_create_deal_on_hs(data, db) -> Any:
     logging.info('Received request to create deal with data: %s', data)
 
     ACCESS_TOKEN = "pat-eu1-39392c32-b4ba-4794-b17e-82770962effb"
@@ -67,10 +90,10 @@ def wrapper_create_deal(data, db) -> Any:
         return {'status': 200, 'message': 'Deal created successfully in HubSpot', 'data': response.json()}
     else:
         logging.error('Error creating deal in HubSpot: %s', response.text)
-        return {'status': response.status_code, 'message': f'Error creating deal in HubSpot: {response.text}'}
+        return {'status': response.status_code, 'message': f'Error creating deal in HubSpot: {response.text}', 'data': None}
 
 
-def wrapper_update_deal(data, db) -> Any:
+def wrapper_update_deal_on_hs(data, db) -> Any:
     logging.info('Received request to update deal with data: %s', data)
     ACCESS_TOKEN = "pat-eu1-39392c32-b4ba-4794-b17e-82770962effb"
 
@@ -106,7 +129,7 @@ def wrapper_update_deal(data, db) -> Any:
         return {'status': 200, 'message': 'Deal created successfully in HubSpot', 'data': response.json()}
     else:
         logging.error('Error creating deal in HubSpot: %s', response.text)
-        return {'status': response.status_code, 'message': f'Error creating deal in HubSpot: {response.text}'}
+        return {'status': response.status_code, 'message': f'Error creating deal in HubSpot: {response.text}', 'data': None}
 
 
 def wrapper_sync_deal(data, db) -> Any:

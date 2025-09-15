@@ -34,21 +34,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// class HomePage2 extends StatefulWidget {
-//   const HomePage2({super.key});
-//
-//   @override
-//   State<HomePage2> createState() => _HomePage2State();
-// }
-//
-// class _HomePage2State extends State<HomePage2> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Text('Hello, World!', style: Theme.of(context).textTheme.headlineMedium),
-//     );
-//   }
-// }
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -7,124 +7,6 @@ import '../models/contact.dart';
 import '../models/company.dart';
 import '../models/mission_order.dart';
 
-// class ApiService {
-//   static const String baseUrl = 'http://localhost:3000';
-//
-//   // Future<List<Contact>> fetchContacts() async {
-//   //   try {
-//   //     final response = await http.get(Uri.parse('$baseUrl/contacts'));
-//   //     if (response.statusCode == 200) {
-//   //       final Map<String, dynamic> decoded = json.decode(response.body); // decode as Map, not List
-//   //       final List<dynamic> data = decoded['data']; // extract the 'data' array
-//   //       return data.map((json) => Contact.fromJson(json)).toList();
-//   //     } else {
-//   //       throw Exception('Failed to load contacts: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error fetching contacts: $e');
-//   //   }
-//   // }
-//
-//   // Future<void> patchContact(Contact contact) async {
-//   //   try {
-//   //     final response = await http.patch(
-//   //       Uri.parse('$baseUrl/contacts/${contact.id}'),
-//   //       headers: {'Content-Type': 'application/json'},
-//   //       body: json.encode(contact.toJson()),
-//   //     );
-//   //
-//   //     if (response.statusCode != 200) {
-//   //       throw Exception('Failed to update contact: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error updating contact: $e');
-//   //   }
-//   // }
-//
-//   // Future<List<Company>> fetchCompanies() async {
-//   //   try {
-//   //     final response = await http.get(Uri.parse('$baseUrl/companies'));
-//   //     if (response.statusCode == 200) {
-//   //       final Map<String, dynamic> decoded = json.decode(response.body); // decode as Map, not List
-//   //       final List<dynamic> data = decoded['data']; // extract the 'data' array
-//   //       return data.map((json) => Company.fromJson(json)).toList();
-//   //     } else {
-//   //       throw Exception('Failed to load companies: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error fetching companies: $e');
-//   //   }
-//   // }
-//
-//   // Future<List<MissionOrder>> fetchMissionOrders() async {
-//   //   try {
-//   //     final response = await http.get(Uri.parse('$baseUrl/mission-orders'));
-//   //     if (response.statusCode == 200) {
-//   //       final Map<String, dynamic> decoded = json.decode(response.body); // decode as Map, not List
-//   //       final List<dynamic> data = decoded['data']; // extract the 'data' array
-//   //       return data.map((json) => MissionOrder.fromJson(json)).toList();
-//   //     } else {
-//   //       throw Exception('Failed to load mission orders: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error fetching mission orders: $e');
-//   //   }
-//   // }
-//
-//   // Future<List<MissionOrder>> fetchMissionOrdersByIds(List<String> ids) async {
-//   //   if (ids.isEmpty) return [];
-//   //
-//   //   try {
-//   //     final response = await http.get(Uri.parse('$baseUrl/mission-orders'));
-//   //     if (response.statusCode == 200) {
-//   //       final Map<String, dynamic> decoded = json.decode(response.body);
-//   //       final List<dynamic> data = decoded['data'];
-//   //       final allOrders = data.map((json) => MissionOrder.fromJson(json)).toList();
-//   //
-//   //       return allOrders.where((order) => ids.contains(order.id)).toList();
-//   //     } else {
-//   //       throw Exception('Failed to load mission orders: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error fetching mission orders by IDs: $e');
-//   //   }
-//   // }
-//
-//   // Future<void> patchMissionOrder(MissionOrder missionOrder) async {
-//   //   try {
-//   //     final response = await http.patch(
-//   //       Uri.parse('$baseUrl/mission-orders/${missionOrder.id}'),
-//   //       headers: {'Content-Type': 'application/json'},
-//   //       body: json.encode({'status': missionOrder.status.toString().split('.').last, 'notes': missionOrder.notes}),
-//   //     );
-//   //
-//   //     if (response.statusCode != 200) {
-//   //       throw Exception('Failed to update mission order: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error updating mission order: $e');
-//   //   }
-//   // }
-//
-//   // Future<Map<String, dynamic>> createMissionOrder(MissionOrder missionOrder) async {
-//   //   try {
-//   //     final response = await http.post(
-//   //       Uri.parse('$baseUrl/mission-orders'),
-//   //       headers: {'Content-Type': 'application/json'},
-//   //       body: json.encode(missionOrder.toJson()),
-//   //     );
-//   //
-//   //     if (response.statusCode == 201) {
-//   //       return json.decode(response.body);
-//   //     } else {
-//   //       throw Exception('Failed to create mission order: ${response.statusCode}');
-//   //     }
-//   //   } catch (e) {
-//   //     throw Exception('Error creating mission order: $e');
-//   //   }
-//   // }
-// }
-
 class FunctionWrapper {
   FirebaseFunctions get instance => FirebaseFunctions.instance;
 
@@ -144,11 +26,28 @@ class FunctionWrapper {
   }
 
   Future<void> updateDealOnHubSpot(MissionOrder order) async {
-
     final HttpsCallable callable = instance.httpsCallable('update_deal');
     Map<String, dynamic> payload = order.hubspotJSON();
     payload['hubspot_deal_id'] = order.hubspotId;
-    await callable.call(payload);
+    final response = await callable.call(payload);
+    if (response.data != null && response.data is Map<String, dynamic>) {
+      final data = response.data as Map<String, dynamic>;
+      print(data);
+    } else {
+      throw Exception('Invalid response from Cloud Function');
+    }
+  }
+
+  Future<void> deleteDealOnHubSpot(String hubspotId) async {
+    final HttpsCallable callable = instance.httpsCallable('delete_deal');
+    final response = await callable.call({'hubspot_deal_id': hubspotId});
+
+    if (response.data != null && response.data is Map<String, dynamic>) {
+      final data = response.data as Map<String, dynamic>;
+      print(data);
+    } else {
+      throw Exception('Invalid response from Cloud Function');
+    }
   }
 }
 

@@ -13,6 +13,7 @@ class MissionOrdersScreen extends StatefulWidget {
 
 class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
   final FirestoreWrapper _firestoreWrapper = FirestoreWrapper();
+  final FunctionWrapper _functionsWrapper = FunctionWrapper();
   List<MissionOrder> _missionOrders = [];
   bool _isLoading = true;
   String? _error;
@@ -54,6 +55,55 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
         return Colors.green;
       case MissionOrderStatus.closed:
         return Colors.red;
+    }
+  }
+
+  Future<void> _deleteMissionOrder(MissionOrder order) async {
+    if (order.hubspotId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Cannot delete: No HubSpot ID found')));
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Mission Order'),
+          content: Text('Are you sure you want to delete "${order.name}"?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
+            TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Delete')),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await _functionsWrapper.deleteDealOnHubSpot(order.hubspotId!);
+        await _firestoreWrapper.deleteMissionOrder(order.id);
+        await _loadMissionOrders();
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Mission order deleted successfully')));
+        }
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to delete mission order: $e')));
+        }
+
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -123,15 +173,25 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
                   ),
                 ],
               ),
-              trailing: IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditMissionOrderScreen(missionOrder: order)),
-                  ).then((_) => _loadMissionOrders());
-                },
-                tooltip: 'Edit Mission Order',
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditMissionOrderScreen(missionOrder: order)),
+                      ).then((_) => _loadMissionOrders());
+                    },
+                    tooltip: 'Edit Mission Order',
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => _deleteMissionOrder(order),
+                    tooltip: 'Delete Mission Order',
+                  ),
+                ],
               ),
               children: [
                 Padding(
