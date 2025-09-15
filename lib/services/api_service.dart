@@ -62,15 +62,57 @@ class FirestoreWrapper {
     String hubspotId = await hubSpotWrapper.createDealOnHubSpot(missionOrder);
     MissionOrder orderUpdated = missionOrder.copyWith(hubspotId: hubspotId);
     DocumentReference docRef = await instance.collection('mission_orders').add(orderUpdated.toJson());
+
+    // update possible contacts
+    for (Contact contact in orderUpdated.contacts) {
+      await instance.collection('contacts').doc(contact.id).update({
+        'mission_order_ids': FieldValue.arrayUnion([docRef.id]),
+      });
+    }
+
+    // update possible companies
+    for (Company company in orderUpdated.companies) {
+      await instance.collection('companies').doc(company.id).update({
+        'mission_order_ids': FieldValue.arrayUnion([docRef.id]),
+      });
+    }
+
     return docRef.id;
   }
 
   Future<void> updateMissionOrder(MissionOrder missionOrder) async {
     await instance.collection('mission_orders').doc(missionOrder.id).update(missionOrder.toJson());
+
+    // update possible contacts
+    for (Contact contact in missionOrder.contacts) {
+      await instance.collection('contacts').doc(contact.id).update({
+        'mission_order_ids': FieldValue.arrayUnion([missionOrder.id]),
+      });
+    }
+
+    // update possible companies
+    for (Company company in missionOrder.companies) {
+      await instance.collection('companies').doc(company.id).update({
+        'mission_order_ids': FieldValue.arrayUnion([missionOrder.id]),
+      });
+    }
   }
 
-  Future<void> deleteMissionOrder(String id) async {
-    await instance.collection('mission_orders').doc(id).delete();
+  Future<void> deleteMissionOrder(MissionOrder missionOrder) async {
+    await instance.collection('mission_orders').doc(missionOrder.id).delete();
+
+    // update possible contacts
+    for (Contact contact in missionOrder.contacts) {
+      await instance.collection('contacts').doc(contact.id).update({
+        'mission_order_ids': FieldValue.arrayRemove([missionOrder.id]),
+      });
+    }
+    // update possible companies
+    for (Company company in missionOrder.companies) {
+      await instance.collection('companies').doc(company.id).update({
+        'mission_order_ids': FieldValue.arrayRemove([missionOrder.id]),
+      });
+    }
   }
 
   Future<MissionOrder> getMissionOrderById(String id) async {

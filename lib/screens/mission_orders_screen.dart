@@ -85,7 +85,7 @@ class _MissionOrdersScreenState extends State<MissionOrdersScreen> {
       });
       try {
         await _functionsWrapper.deleteDealOnHubSpot(order.hubspotId!);
-        await _firestoreWrapper.deleteMissionOrder(order.id);
+        await _firestoreWrapper.deleteMissionOrder(order);
         await _loadMissionOrders();
         if (mounted) {
           ScaffoldMessenger.of(

@@ -88,8 +88,8 @@ class MissionOrder {
   });
 
   factory MissionOrder.fromJson(Map<String, dynamic> json) {
-    DateTime startDate = DateTools.tryToParseDate(json['start_date']);
-    DateTime endDate = DateTools.tryToParseDate(json['end_date']);
+    DateTime startDate = DateTools.tryToParseDate(json['start_date']) ;
+    DateTime endDate = DateTools.tryToParseDate(json['end_date']) ;
     MissionOrderType missionType = missionOrderTypeValues[json['type']] ?? MissionOrderType.contract;
     MissionOrderStatus status = MissionOrderStatus.values.firstWhere(
       (e) => e.name == json['status'],
@@ -102,15 +102,15 @@ class MissionOrder {
 
     MissionOrder m = MissionOrder(
       id: json['id'],
-      name: json['name'],
+      name: json['name'] ?? 'no name set',
       type: missionType,
-      jobTitle: json['job_title'],
-      location: json['location'],
+      jobTitle: json['job_title'] ?? '',
+      location: json['location'] ?? '',
       startDate: startDate,
       endDate: endDate,
       status: status,
       stage: stage,
-      amount: json['amount'] ?? '',
+      amount: json['amount'] ?? '0',
       notes: json['notes'] ?? '',
       contacts: json['contacts'],
       companies: json['companies'],

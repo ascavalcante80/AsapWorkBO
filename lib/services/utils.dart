@@ -28,7 +28,7 @@ class DateTools {
       final epoch = double.parse(dateTimeString).toInt();
       return DateTime.fromMillisecondsSinceEpoch(epoch);
     } catch (e) {
-      rethrow;
+      return DateTime.now();
     }
   }
 }
