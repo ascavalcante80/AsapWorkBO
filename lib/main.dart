@@ -30,28 +30,19 @@ class MyApp extends StatelessWidget {
       title: 'Asap Work',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6366F1),
-          brightness: Brightness.dark,
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6366F1), brightness: Brightness.dark),
         scaffoldBackgroundColor: const Color(0xFF0F0F23),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF1A1B36),
           elevation: 0,
           centerTitle: true,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
         ),
         cardTheme: CardTheme(
           color: const Color(0xFF1A1B36),
           elevation: 8,
           shadowColor: Colors.black.withOpacity(0.3),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -59,13 +50,8 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
             elevation: 0,
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
@@ -73,13 +59,8 @@ class MyApp extends StatelessWidget {
             foregroundColor: const Color(0xFF6366F1),
             side: const BorderSide(color: Color(0xFF6366F1), width: 2),
             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            textStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -112,52 +93,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Asap Work'),
-      ),
+      appBar: AppBar(title: const Text('Asap Work')),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFF0F0F23),
-              const Color(0xFF1A1B36).withOpacity(0.8),
-            ],
+            colors: [const Color(0xFF0F0F23), const Color(0xFF1A1B36).withOpacity(0.8)],
           ),
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+            padding: const EdgeInsets.only(left: 400, right: 400, top: 40, bottom: 40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
                   'Welcome to Asap Work',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: -0.5),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   'Streamline your business operations with our comprehensive management platform',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withOpacity(0.8),
-                    height: 1.5,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8), height: 1.5),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 64),
@@ -166,9 +132,7 @@ class HomePage extends StatelessWidget {
                   icon: Icons.people_rounded,
                   title: 'Contacts',
                   subtitle: 'Manage your professional network',
-                  gradient: LinearGradient(
-                    colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)],
-                  ),
+                  gradient: LinearGradient(colors: [const Color(0xFF3B82F6), const Color(0xFF1E40AF)]),
                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ContactsScreen())),
                 ),
                 const SizedBox(height: 20),
@@ -177,10 +141,9 @@ class HomePage extends StatelessWidget {
                   icon: Icons.business_rounded,
                   title: 'Companies',
                   subtitle: 'Track your business relationships',
-                  gradient: LinearGradient(
-                    colors: [const Color(0xFF10B981), const Color(0xFF059669)],
-                  ),
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompaniesScreen())),
+                  gradient: LinearGradient(colors: [const Color(0xFF10B981), const Color(0xFF059669)]),
+                  onTap:
+                      () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompaniesScreen())),
                 ),
                 const SizedBox(height: 20),
                 _buildFeatureCard(
@@ -188,10 +151,10 @@ class HomePage extends StatelessWidget {
                   icon: Icons.work_rounded,
                   title: 'Mission Orders',
                   subtitle: 'Organize and monitor your projects',
-                  gradient: LinearGradient(
-                    colors: [const Color(0xFFF59E0B), const Color(0xFFD97706)],
-                  ),
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MissionOrdersScreen())),
+                  gradient: LinearGradient(colors: [const Color(0xFFF59E0B), const Color(0xFFD97706)]),
+                  onTap:
+                      () =>
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const MissionOrdersScreen())),
                 ),
               ],
             ),
@@ -213,13 +176,7 @@ class HomePage extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20, offset: const Offset(0, 8))],
       ),
       child: Material(
         color: Colors.transparent,
@@ -236,11 +193,7 @@ class HomePage extends StatelessWidget {
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    icon,
-                    size: 32,
-                    color: Colors.white,
-                  ),
+                  child: Icon(icon, size: 32, color: Colors.white),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
@@ -249,28 +202,14 @@ class HomePage extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                      ),
+                      Text(subtitle, style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.9))),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white.withOpacity(0.8),
-                  size: 20,
-                ),
+                Icon(Icons.arrow_forward_ios_rounded, color: Colors.white.withOpacity(0.8), size: 20),
               ],
             ),
           ),
